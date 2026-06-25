@@ -133,7 +133,7 @@ app.post("/api/lyha", async (req, res) => {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: b.model || "claude-3-5-sonnet-20241022",
+        model: process.env.CLAUDE_MODEL || "claude-sonnet-4-6",
         max_tokens: 1024,
         system: b.system || "",
         messages: Array.isArray(b.messages) ? b.messages : [],
