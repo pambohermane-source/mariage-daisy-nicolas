@@ -116,6 +116,43 @@ app.get("/api/admin/export.csv", requireAdmin, (req, res) => {
   res.send(csv);
 });
 
+// ── API LYHA : proxy vers Claude (la clé reste sur le serveur) ─
+// Variable à définir sur Railway : ANTHROPIC_API_KEY
+app.post("/api/lyha", async (req, res) => {
+  const KEY = process.env.ANTHROPIC_API_KEY || "";
+  if (!KEY) {
+    return res.status(503).json({ error: "Assistant indisponible (clé non configurée)." });
+  }
+  try {
+    const b = req.body || {};
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": KEY,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: b.model || "claude-3-5-sonnet-20241022",
+        max_tokens: 1024,
+        system: b.system || "",
+        messages: Array.isArray(b.messages) ? b.messages : [],
+      }),
+    });
+    if (!r.ok) {
+      const detail = await r.text().catch(() => "");
+      console.error("Erreur Claude:", r.status, detail.slice(0, 300));
+      return res.status(502).json({ error: "Erreur de l'assistant." });
+    }
+    const data = await r.json();
+    const text = (data.content || []).map((c) => c.text || "").join("").trim();
+    res.json({ text });
+  } catch (err) {
+    console.error("Erreur /api/lyha:", err);
+    res.status(500).json({ error: "Erreur serveur assistant." });
+  }
+});
+
 // ── Back-office (page protégée) ────────────────────────────
 app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "admin.html"));
