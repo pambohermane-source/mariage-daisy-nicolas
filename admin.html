@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Back-office · Confirmations mariage</title>
+<style>
+  :root{
+    --ink:#23303a; --soft:#5d6b73; --line:#e4ddd1; --bg:#f6f1e8;
+    --gold:#b8923f; --green:#3f7a52; --bordeaux:#7a2e3a; --card:#fff;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:"Segoe UI",system-ui,sans-serif; color:var(--ink); background:var(--bg); }
+  header{
+    background:var(--ink); color:#fff; padding:22px clamp(16px,4vw,40px);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;
+  }
+  header h1{ font-size:19px; margin:0; font-weight:600; letter-spacing:.01em; }
+  header .sub{ font-size:12.5px; opacity:.7; margin-top:3px; }
+  .actions{ display:flex; gap:10px; flex-wrap:wrap; }
+  .btn{
+    border:none; border-radius:8px; padding:10px 16px; font-size:13.5px; font-weight:600;
+    cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:7px;
+  }
+  .btn-gold{ background:var(--gold); color:#fff; }
+  .btn-ghost{ background:rgba(255,255,255,.12); color:#fff; }
+  .btn:hover{ filter:brightness(1.06); }
+
+  .wrap{ padding:clamp(16px,4vw,40px); max-width:1200px; margin:0 auto; }
+
+  .stats{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:26px; }
+  .stat{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:18px 22px; flex:1 1 150px; min-width:140px;
+  }
+  .stat .n{ font-size:30px; font-weight:700; color:var(--gold); line-height:1; }
+  .stat .l{ font-size:12.5px; color:var(--soft); margin-top:7px; letter-spacing:.02em; }
+
+  .toolbar{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
+  .toolbar input, .toolbar select{
+    padding:9px 13px; border:1px solid var(--line); border-radius:8px; font-size:13.5px; background:#fff; color:var(--ink);
+  }
+  .toolbar input{ flex:1 1 220px; }
+
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  th, td{ text-align:left; padding:13px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th{ background:#efe7d9; font-weight:600; font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--soft); position:sticky; top:0; }
+  tr:last-child td{ border-bottom:none; }
+  tr:hover td{ background:#faf6ef; }
+  td .em{ color:var(--soft); font-size:12.5px; }
+
+  .tag{ display:inline-block; padding:3px 10px; border-radius:999px; font-size:11.5px; font-weight:600; }
+  .tag.cout{ background:#efe3f3; color:#6c4488; }
+  .tag.civ{ background:#e3eef0; color:#2f6a73; }
+  .tag.both{ background:#f5ecd9; color:#9a6a1e; }
+
+  .gpill{ display:inline-block; min-width:24px; text-align:center; color:var(--green);
+    background:#eaf3ed; border-radius:6px; padding:2px 8px; font-weight:700; }
+
+  .del{ background:none; border:none; color:var(--bordeaux); cursor:pointer; font-size:16px; opacity:.5; }
+  .del:hover{ opacity:1; }
+
+  .empty{ text-align:center; padding:60px 20px; color:var(--soft); }
+  .msgcell{ max-width:280px; }
+  @media (max-width:760px){
+    th.hide-m, td.hide-m{ display:none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Confirmations · Daisy-Helen &amp; Nicolas</h1>
+    <div class="sub">Back-office des réponses au mariage · 25 &amp; 31 juillet 2026</div>
+  </div>
+  <div class="actions">
+    <a class="btn btn-gold" href="/api/admin/export.csv">⬇ Exporter en Excel (CSV)</a>
+    <button class="btn btn-ghost" onclick="load()">↻ Actualiser</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar">
+    <input id="q" placeholder="Rechercher un nom, email, téléphone…" oninput="render()" />
+    <select id="filterEvt" onchange="render()">
+      <option value="">Tous les événements</option>
+      <option value="cout">Coutumier</option>
+      <option value="civ">Civil</option>
+      <option value="both">Les deux</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th class="hide-m">Contact</th>
+          <th>Événement</th>
+          <th>Accomp.</th>
+          <th class="hide-m">Régime</th>
+          <th class="hide-m msgcell">Message</th>
+          <th class="hide-m">Envoyé le</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="empty" id="empty" style="display:none">Aucune confirmation pour le moment.</div>
+  </div>
+</div>
+
+<script>
+  const EVT = { cout:"Coutumier", civ:"Civil", both:"Les deux" };
+  let DATA = [];
+
+  async function load(){
+    try{
+      const r = await fetch("/api/admin/rsvps", { headers:{ "Accept":"application/json" } });
+      if(!r.ok) throw new Error(r.status);
+      const j = await r.json();
+      DATA = j.rows || [];
+      stats(j);
+      render();
+    }catch(e){
+      document.getElementById("rows").innerHTML =
+        '<tr><td colspan="8" style="color:#7a2e3a;padding:24px">Erreur de chargement ('+e.message+'). Réessayez.</td></tr>';
+    }
+  }
+
+  function stats(j){
+    const both = DATA.filter(r=>r.event==="both").length;
+    const cout = DATA.filter(r=>r.event==="cout").length;
+    const civ  = DATA.filter(r=>r.event==="civ").length;
+    document.getElementById("stats").innerHTML = `
+      <div class="stat"><div class="n">${j.count}</div><div class="l">Confirmations</div></div>
+      <div class="stat"><div class="n">${j.totalGuests}</div><div class="l">Accompagnants au total</div></div>
+      <div class="stat"><div class="n">${cout+both}</div><div class="l">Présents au coutumier</div></div>
+      <div class="stat"><div class="n">${civ+both}</div><div class="l">Présents au civil</div></div>`;
+  }
+
+  function fmtDate(iso){
+    if(!iso) return "—";
+    const d = new Date(iso);
+    if(isNaN(d)) return iso;
+    return d.toLocaleDateString("fr-FR",{day:"2-digit",month:"short",year:"numeric"}) +
+           " · " + d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+  }
+
+  function render(){
+    const q = document.getElementById("q").value.trim().toLowerCase();
+    const fe = document.getElementById("filterEvt").value;
+    const list = DATA.filter(r=>{
+      if(fe && r.event!==fe) return false;
+      if(!q) return true;
+      return (r.name+" "+r.email+" "+r.phone+" "+(r.message||"")).toLowerCase().includes(q);
+    });
+    const rows = document.getElementById("rows");
+    document.getElementById("empty").style.display = list.length ? "none" : "block";
+    rows.innerHTML = list.map(r=>`
+      <tr>
+        <td><strong>${esc(r.name)}</strong><div class="em">${langFlag(r.language)}</div></td>
+        <td class="hide-m"><div>${esc(r.email)}</div><div class="em">${esc(r.phone||"—")}</div></td>
+        <td><span class="tag ${r.event}">${EVT[r.event]||r.event}</span></td>
+        <td><span class="gpill">${r.guests||0}</span></td>
+        <td class="hide-m">${esc(r.diet||"—")}</td>
+        <td class="hide-m msgcell">${esc(r.message||"")||"<span class='em'>—</span>"}</td>
+        <td class="hide-m em">${fmtDate(r.submitted_at)}</td>
+        <td><button class="del" title="Supprimer" onclick="del(${r.id})">✕</button></td>
+      </tr>`).join("");
+  }
+
+  function langFlag(l){
+    return ({fr:"🇫🇷 Français", en:"🇬🇧 English", es:"🇪🇸 Español"})[l] || (l||"");
+  }
+  function esc(s){
+    return String(s==null?"":s).replace(/[&<>"]/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+  }
+
+  async function del(id){
+    if(!confirm("Supprimer cette confirmation ?")) return;
+    await fetch("/api/admin/rsvps/"+id, { method:"DELETE" });
+    load();
+  }
+
+  load();
+</script>
+</body>
+</html>
