@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  ::selection { background: rgba(205,164,75,.3); }
+</style>
+</helmet>
+<div style="min-height:100vh; width:100%; background:radial-gradient(120% 100% at 50% 0%, #1c231f 0%, #0c100d 55%, #080a08 100%); font-family:'Jost',sans-serif; display:flex; flex-direction:column; align-items:center; padding:40px 16px 28px;">
+
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+    <span style="width:26px; height:1px; background:#cda44b; opacity:.8;"></span>
+    <span style="font-size:11px; letter-spacing:.3em; color:#d8b25a; text-transform:uppercase;">Mariage Coutumier</span>
+    <span style="width:26px; height:1px; background:#cda44b; opacity:.8;"></span>
+  </div>
+  <h1 style="margin:12px 0 14px; font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:clamp(28px,7vw,44px); color:#fbfaf7; text-align:center; line-height:1.15;">Daisy-Helen &amp; Nicolas</h1>
+  <p style="margin:0 0 8px; font-size:16px; color:#e9e4d8; text-align:center; max-width:340px; line-height:1.5;">Bienvenue au mariage coutumier de Daisy-Helen &amp; Nicolas !</p>
+  <p style="margin:0 0 28px; font-size:14px; color:#a89a72; text-align:center;">Tapez votre nom pour trouver votre table</p>
+
+  <div style="width:100%; max-width:480px; background:rgba(255,255,255,.03); border:1px solid rgba(205,164,75,.3); border-radius:4px; padding:24px 20px;">
+
+    <label style="display:block; font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:#d8b25a; margin-bottom:10px;">Votre nom &amp; pr&eacute;nom</label>
+    <input type="text" value="{{ query }}" oninput="{{ onInput }}" onkeydown="{{ onKeyDown }}" placeholder="Ex. Nicole Muloko" style="width:100%; padding:16px 16px; font-size:16px; font-family:'Jost',sans-serif; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.18); border-radius:3px; color:#fbfaf7; outline:none;">
+
+    <sc-if value="{{ showSuggestions }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:10px; border:1px solid rgba(255,255,255,.12); border-radius:3px; overflow:hidden;">
+        <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="0">
+          <div onclick="{{ s.select }}" style="padding:13px 16px; font-size:15px; color:#e9e4d8; cursor:pointer; border-bottom:1px solid rgba(255,255,255,.06);" style-hover="background:rgba(205,164,75,.12);">{{ s.name }} <span style="color:#8a8378; font-size:13px;"> &middot; {{ s.table }}</span></div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <button onclick="{{ onSearch }}" style="margin-top:16px; width:100%; padding:16px; background:#cda44b; color:#1a1408; border:none; border-radius:3px; font-size:15px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; cursor:pointer; -webkit-tap-highlight-color:transparent;" style-hover="background:#dbb45c;">Rechercher</button>
+
+    <sc-if value="{{ hasResult }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:28px; padding:26px; text-align:center; border:1px solid rgba(205,164,75,.5); background:rgba(205,164,75,.06); border-radius:3px;">
+        <div style="font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:#a89a72; margin-bottom:8px;">{{ resultName }}</div>
+        <div style="font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:#8a8378; margin-bottom:6px;">Votre table</div>
+        <div style="font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:38px; color:#f4e7c4;">{{ resultTable }}</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:28px; padding:20px; text-align:center; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.03); border-radius:3px; color:#c9c2b3; font-size:15px; line-height:1.5;">
+        Nom introuvable. V&eacute;rifiez l'orthographe ou pr&eacute;sentez-vous &agrave; l'accueil.
+      </div>
+    </sc-if>
+
+  </div>
+
+  <p style="margin-top:32px; font-size:13px; color:#6c665c; text-align:center; max-width:340px;">Besoin d'aide&nbsp;? Rendez-vous au stand d'accueil.</p>
+
+  <p style="margin-top:40px; font-size:11px; letter-spacing:.14em; color:#4a453d; text-align:center;">&Omacr;R&Iuml;A &middot; Digital Wedding</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const GUESTS = [{"name":"Nicole Muloko","table":"Table Nzé"},{"name":"Richard Lowe","table":"Table Nzé"},{"name":"Léontine Kabouya","table":"Table Nzé"},{"name":"Madame et Monsieur Ndende","table":"Table Nzé"},{"name":"Nicole et Nestor Mbou","table":"Table Nzé"},{"name":"Amadou Niagadou","table":"Table Nzé"},{"name":"Iseult et Tamaris Mokoko","table":"Table Loubaki"},{"name":"Djeda Kalassa","table":"Table Loubaki"},{"name":"Yasese Ondias Souna","table":"Table Loubaki"},{"name":"Olivia et Romaric Oniangue","table":"Table Loubaki"},{"name":"JD Kaniki","table":"Table Loubaki"},{"name":"Carl Mihindou","table":"Table Meye"},{"name":"Désiré Forget","table":"Table Meye"},{"name":"Eric Moussavou","table":"Table Meye"},{"name":"Michael Nguema","table":"Table Meye"},{"name":"Serge Nzikoue","table":"Table Meye"},{"name":"Stephene Mendene","table":"Table Meye"},{"name":"Eugénie Nguema","table":"Table Meye"},{"name":"Aristide Obame","table":"Table Meye"},{"name":"Karla Ondzounga","table":"Table Mvé"},{"name":"Rita Boudianguela","table":"Table Mvé"},{"name":"Stephane Igamba","table":"Table Mvé"},{"name":"Christa et Johan Ivala","table":"Table Mvé"},{"name":"Julien et Johanne Do Marcolino","table":"Table Mvé"},{"name":"Laetitia Ndyiade","table":"Table Mvé"},{"name":"Ibrahim Okouaghe et Édith Talyssa Ye Doumbeneny","table":"Table Massamba"},{"name":"Laurence Ndong","table":"Table Massamba"},{"name":"Mays Mouissi","table":"Table Massamba"},{"name":"Francois Ndong Obiang","table":"Table Massamba"},{"name":"Anemone et Ivan Mengone","table":"Table Nsimba"},{"name":"Julien Assoumou","table":"Table Nsimba"},{"name":"Fortuné Matsiengui","table":"Table Nsimba"},{"name":"Minault Maxime","table":"Table Nsimba"},{"name":"Tammam Andjembe","table":"Table Ndong"},{"name":"Général Andjembe","table":"Table Ndong"},{"name":"François Nguekeyi","table":"Table Ndong"},{"name":"Martin Boguikouma","table":"Table Ndong"},{"name":"Morgan Boguikouma","table":"Table Malonga"},{"name":"Vanessa Boguikouma","table":"Table Malonga"},{"name":"Lenat Elossie","table":"Table Malonga"},{"name":"Noor Boguikouma","table":"Table Malonga"},{"name":"Bruno Boguikouma","table":"Table Malonga"},{"name":"Rodney et Vandrick Boguikouma","table":"Table Malonga"},{"name":"Benda Ndaki","table":"Table Malonga"},{"name":"Rose et Abdu Razzaq Guy Kambogo","table":"Table Zue"},{"name":"Alberto Wenceslas MOUNGUENGUI MOUDOKI","table":"Table Zue"},{"name":"Edgar Ovono","table":"Table Zue"},{"name":"Eloi Nzondo","table":"Table Zue"},{"name":"Eric Boumah","table":"Table Zue"},{"name":"Alexandre Barro Chambrier","table":"Table Mabiala"},{"name":"Biyoghe Mba","table":"Table Mabiala"},{"name":"Eyeghe Ndong","table":"Table Mabiala"},{"name":"Raymond Ndong Sima","table":"Table Mabiala"},{"name":"Virginie & Philippe Eteno","table":"Table Mampouya"},{"name":"Félix Bongo","table":"Table Mampouya"},{"name":"Patrick Barbera","table":"Table Mampouya"},{"name":"Philippe Augé","table":"Table Mampouya"},{"name":"Ly Lan Muloko","table":"Table Assoumou"},{"name":"Jean Michel Muloko","table":"Table Assoumou"},{"name":"Glory Muloko","table":"Table Assoumou"},{"name":"Mauwa Muloko","table":"Table Assoumou"},{"name":"Tino Muloko","table":"Table Assoumou"},{"name":"Mbambiri Yvon Albert","table":"Table Assoumou"},{"name":"Fautin Yannick Legault","table":"Table Assoumou"},{"name":"Emma Fayette","table":"Table Assoumou"},{"name":"Steeve Ondzounga","table":"Table Obame"},{"name":"Léon Paul Ngoulakia","table":"Table Obame"},{"name":"Jacques Sultan","table":"Table Obame"},{"name":"Dr Lembagoye","table":"Table Obame"},{"name":"Jean Bruno Boguikouma","table":"Table Obame"},{"name":"Arsène Nkoghe","table":"Table Mintsa"},{"name":"Fabrice Ntchango","table":"Table Mintsa"},{"name":"Théo Ngouoni","table":"Table Mintsa"},{"name":"Anouchka et Joel Missanda","table":"Table Mintsa"},{"name":"Hermélia Hayes","table":"Table Kimbembe"},{"name":"Ange Mabdinga","table":"Table Kimbembe"},{"name":"Charline Epouta","table":"Table Kimbembe"},{"name":"David Mbadinga","table":"Table Kimbembe"},{"name":"Sita Bounga","table":"Table Kimbembe"},{"name":"Emmanuelle Mutund","table":"Table Kimbembe"},{"name":"Daniella Mutund","table":"Table Kimbembe"},{"name":"Nadia Ndouna","table":"Table Nkounkou"},{"name":"Nina Abouna","table":"Table Nkounkou"},{"name":"Jeuneux Yvon","table":"Table Nkounkou"},{"name":"Arnaud Engandji Alandji","table":"Table Nkounkou"},{"name":"Alain Claude Kouakou","table":"Table Nkounkou"},{"name":"Jacques Revangue","table":"Table Tati"},{"name":"Willy Otsia","table":"Table Tati"},{"name":"Wiliam Okias","table":"Table Tati"},{"name":"Paola Maryse Obounda","table":"Table Tati"},{"name":"Price Andjuma","table":"Table Tati"},{"name":"Maella Likassa","table":"Table Tati"},{"name":"Terance Eboumi","table":"Table Tati"},{"name":"LOUEMBE Blaise","table":"Table Mba"},{"name":"MAGNAGNA Christian","table":"Table Mba"},{"name":"MOUBELE Pacôme","table":"Table Mba"},{"name":"BLOUNDONO Egide","table":"Table Mba"},{"name":"Khady Ndiaye","table":"Table Owono"},{"name":"Claire Epouta","table":"Table Owono"},{"name":"Camille Moutsinga","table":"Table Owono"},{"name":"Samuel Mbadinga","table":"Table Owono"},{"name":"Carlise Ndinga","table":"Table Owono"},{"name":"Aubert Ndjila","table":"Table Mengara"},{"name":"Franck Njimbi","table":"Table Mengara"},{"name":"Hugues Mefane","table":"Table Mengara"},{"name":"Maire d'Akanda","table":"Table Mengara"},{"name":"Maixent Ngounga","table":"Table Mengara"},{"name":"Alain AFANER","table":"Table Mengara"},{"name":"Adrien Nguema Mba","table":"Table Kabasele"},{"name":"Léande Nzue","table":"Table Kabasele"},{"name":"Eugène Mba","table":"Table Kabasele"},{"name":"Murielle Minkoue","table":"Table Kabasele"},{"name":"Lyha Emmanuelle Dibasso","table":"Table Diata"},{"name":"Maelle Flore Loundou","table":"Table Diata"},{"name":"Claude Esther Kombe Loundou","table":"Table Diata"},{"name":"Raivire Jade","table":"Table Diata"},{"name":"Eugene Nguema","table":"Table Diata"},{"name":"Ethan Boguikouma","table":"Table Diata"},{"name":"Talyann Nguema","table":"Table Diata"},{"name":"Malick Owono Mengue","table":"Table Diata"},{"name":"Edmery Mpouho","table":"Table Foutou"},{"name":"Luther Abouna","table":"Table Foutou"},{"name":"Joseph Oyono Ebouka","table":"Table Foutou"},{"name":"Rajesh Parikh","table":"Table Foutou"},{"name":"Prêtres (Séminaire Brottier)","table":"Table Foutou"},{"name":"Julien Nkoghe Bekale","table":"Table Mengue"},{"name":"Gabriel Ossiba","table":"Table Mengue"},{"name":"Henri Claude Oyima","table":"Table Mengue"},{"name":"Christian Bongo Ondimba","table":"Table Mengue"},{"name":"Jean Francois Moussounda","table":"Table Nzamba"},{"name":"Mr et Mme Mossalat-Mouguengui Mault","table":"Table Nzamba"},{"name":"Marc Ona Essangui","table":"Table Nzamba"},{"name":"Samuel Abeingne","table":"Table Nzamba"},{"name":"Evrard Etoughe","table":"Table Nzamba"},{"name":"Moukoumi Pascal","table":"Table Tchibinda"},{"name":"Francisco Pineda","table":"Table Tchibinda"},{"name":"Jean Marc Ferralis","table":"Table Tchibinda"},{"name":"Xavier Jeffret","table":"Table Tchibinda"},{"name":"Lydie et Ashley Akendengue","table":"Table Edzang"},{"name":"Ousmane Mabignath","table":"Table Edzang"},{"name":"Hashir Mabignath","table":"Table Edzang"},{"name":"Erdmann Scott","table":"Table Edzang"},{"name":"JC Minkoue","table":"Table Kounkou"},{"name":"Léodpold Ava","table":"Table Kounkou"},{"name":"Vivien Oyini","table":"Table Kounkou"},{"name":"Francis Abiaghe","table":"Table Kounkou"},{"name":"Victor Wora","table":"Table Kounkou"},{"name":"Issa Salatou","table":"Table Nguema"},{"name":"Richard Obiang Ava","table":"Table Nguema"},{"name":"Steeve Davin Moughiama","table":"Table Nguema"},{"name":"Salatou Hassan","table":"Table Nguema"},{"name":"Celia Aleka et Fleury Onanga","table":"Table Milandou"},{"name":"Michelle et Rudy Ongollo","table":"Table Milandou"},{"name":"Marlene Muteba","table":"Table Milandou"},{"name":"Sancho Ekaye","table":"Table Milandou"},{"name":"César Nnang","table":"Table Milandou"},{"name":"Georges Nzoghe Falana","table":"Table Ngoma"},{"name":"Séraphtin Akoure Davain","table":"Table Ngoma"},{"name":"Bernabé Mebaley Mba Menie","table":"Table Ngoma"},{"name":"Ondo Mba","table":"Table Ngoma"},{"name":"Maella Likassa","table":"Table Akendengue"},{"name":"Jennifer Likassa","table":"Table Akendengue"},{"name":"Patrick Kaffe","table":"Table Akendengue"},{"name":"Noelle Ibinga","table":"Table Akendengue"},{"name":"Ayissatou Sagnon","table":"Table Akendengue"},{"name":"Lydie Ignanga","table":"Table Akendengue"},{"name":"Victorine Ngo Bikay","table":"Table Akendengue"},{"name":"Paul Thomo Assoumou","table":"Table Ella"},{"name":"Faustin Laurent Bilie Essone","table":"Table Ella"},{"name":"Jean Michel Ndoutoume","table":"Table Ella"},{"name":"Jean Jacques Kangue","table":"Table Ella"},{"name":"Noel Mboulou","table":"Table Mavoungou"},{"name":"Jean Robert Obiang","table":"Table Mavoungou"},{"name":"Rhinesse Katsou","table":"Table Mavoungou"},{"name":"Bernadette Ogombe","table":"Table Mavoungou"},{"name":"Erika Cordelie","table":"Table Mavoungou"},{"name":"Claude Edembe","table":"Table Mavoungou"},{"name":"Ghislain Mfoulouh","table":"Table Mavoungou"},{"name":"Constantin Ntchoreret","table":"Table Bemba"},{"name":"Legault Richard","table":"Table Bemba"},{"name":"Legault Daniel","table":"Table Bemba"},{"name":"Christian Olivier Lasseny","table":"Table Bemba"},{"name":"G","table":"Table Bemba"},{"name":"SOUMAHO Mr & Mme","table":"Table Bemba"},{"name":"MOUSSALET MANFOUMBI Mr & Mme","table":"Table Bemba"},{"name":"Carlise et Hermann Yeo","table":"Table Ondo"},{"name":"Larry Omouala","table":"Table Ondo"},{"name":"Malika et Arnaud Lebomo","table":"Table Ondo"},{"name":"Nathalie Mfourou","table":"Table Ondo"},{"name":"Zachelie Mfourou","table":"Table Ondo"},{"name":"Laïka et Macaire NEMBE","table":"Table Bekale"},{"name":"DGA AFG","table":"Table Bekale"},{"name":"Francis Mve","table":"Table Bakala"},{"name":"Katia Assaly","table":"Table Bakala"},{"name":"Scoot Erdmann","table":"Table Bakala"},{"name":"Janin Yogui","table":"Table Bakala"},{"name":"Aziz Daouda","table":"Table Bakala"},{"name":"Alex Obame","table":"Table Miakassissa"},{"name":"Ashley Magandzi","table":"Table Miakassissa"},{"name":"Nina Yafama","table":"Table Miakassissa"},{"name":"Gisèle Ompilaga","table":"Table Miakassissa"},{"name":"Sosthène Moukongo","table":"Table Miakassissa"},{"name":"Michelia Oye","table":"Table Miakassissa"},{"name":"Emmanuel Oyone","table":"Table Miakassissa"},{"name":"Roger Sombo","table":"Table Miakassissa"},{"name":"Vicky Muzadi","table":"Table Miakassissa"},{"name":"Virginie Bomboko","table":"Table Miakassissa"},{"name":"Nkumu  Janine","table":"Table Miakassissa"},{"name":"Solange Kalonji","table":"Table Miakassissa"},{"name":"Mimo Khoury","table":"Table Miakassissa"},{"name":"Sandra Kameke","table":"Table Miakassissa"},{"name":"Christiane Muloko","table":"Table Miakassissa"},{"name":"Nacky Muloko","table":"Table Angue"},{"name":"Roger Muloko","table":"Table Angue"},{"name":"Maguy et Claude Muloko","table":"Table Angue"},{"name":"Ninani Yves","table":"Table Angue"},{"name":"Luhuruma France","table":"Table Angue"},{"name":"Makombo Tabele","table":"Table Angue"},{"name":"Clotilde Mutund","table":"Table Ngouala"},{"name":"Jacky Kalassa","table":"Table Ngouala"},{"name":"Marceline Kaozi","table":"Table Ngouala"},{"name":"Elisabeth Patricia Fayette","table":"Table Ngouala"},{"name":"Line Thérèse Fayette","table":"Table Ngouala"},{"name":"Mawaya Mutoke Pélagie","table":"Table Ngouala"},{"name":"Eric et Nanou Monga","table":"Table Ngouala"},{"name":"ADANDE Aline","table":"Table Efoua"},{"name":"IGAMBA Anne-Marie","table":"Table Efoua"},{"name":"MOUSSALET Augustine et Mony","table":"Table Efoua"},{"name":"OSSOUKA Sophie","table":"Table Efoua"},{"name":"NJOUNGUI Mr & Mme","table":"Table Efoua"},{"name":"Patricia Berre","table":"Table Efoua"},{"name":"Guy Kotha","table":"Table Batantou"},{"name":"Sylvie Kotha Nzamba","table":"Table Batantou"},{"name":"BANGAGNA Monique","table":"Table Batantou"},{"name":"Marie Nguema","table":"Table Batantou"},{"name":"Annick Louembe","table":"Table Eyi"},{"name":"Marie Flore Louembe","table":"Table Eyi"},{"name":"Rémi et Chimène Louembe","table":"Table Eyi"},{"name":"Ebang AssekoChristiane","table":"Table Eyi"},{"name":"Danielle Louembe","table":"Table Eyi"},{"name":"Lilian Louembe","table":"Table Eyi"},{"name":"Sarah ABOUNA","table":"Table Mouyabi"},{"name":"Lucie Ondzounga","table":"Table Mouyabi"},{"name":"Marie ONDZOUNGA","table":"Table Mouyabi"},{"name":"Jumeaux Général KOUNA et Mmes (PPE)","table":"Table Mouyabi"}];
+
+function norm(s) {
+  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+}
+
+class Component extends DCLogic {
+  state = { query: "", result: null, searched: false };
+
+  onInput = (e) => this.setState({ query: e.target.value, searched: false, result: null });
+
+  onKeyDown = (e) => { if (e.key === "Enter") this.doSearch(); };
+
+  doSearch = () => {
+    const q = norm(this.state.query);
+    if (!q) { this.setState({ result: null, searched: true }); return; }
+    let found = GUESTS.find(g => norm(g.name) === q);
+    if (!found) found = GUESTS.find(g => norm(g.name).includes(q) && q.length >= 3);
+    this.setState({ result: found || null, searched: true });
+  };
+
+  onSearch = () => this.doSearch();
+
+  select = (g) => this.setState({ query: g.name, result: g, searched: true });
+
+  renderVals() {
+    const q = norm(this.state.query);
+    let suggestions = [];
+    if (q.length >= 2 && !this.state.searched) {
+      suggestions = GUESTS.filter(g => norm(g.name).includes(q)).slice(0, 6).map(g => ({
+        name: g.name, table: g.table, select: () => this.select(g)
+      }));
+    }
+    return {
+      query: this.state.query,
+      onInput: this.onInput,
+      onKeyDown: this.onKeyDown,
+      onSearch: this.onSearch,
+      showSuggestions: suggestions.length > 0,
+      suggestions,
+      hasResult: !!this.state.result,
+      resultName: this.state.result ? this.state.result.name : "",
+      resultTable: this.state.result ? this.state.result.table : "",
+      hasError: this.state.searched && !this.state.result,
+    };
+  }
+}
+</script>
+</body>
+</html>
