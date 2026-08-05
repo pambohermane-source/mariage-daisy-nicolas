@@ -110,7 +110,6 @@ img{ max-width:100%; display:block; }
 .gal-more-btn{ font-family:var(--label); letter-spacing:.16em; text-transform:uppercase; font-size:12px; color:var(--ink);
   background:none; border:1px solid var(--gold); padding:14px 34px; cursor:pointer; transition:.3s; }
 .gal-more-btn:hover{ background:var(--gold); color:#fff; }
-
 /* ===== lightbox ===== */
 .lightbox{ position:fixed; inset:0; background:rgba(20,17,13,.94); z-index:300; display:none; align-items:center; justify-content:center; padding:30px; }
 .lightbox.on{ display:flex; }
@@ -123,6 +122,7 @@ img{ max-width:100%; display:block; }
 .footer .f-note{ font-family:var(--label); letter-spacing:.15em; text-transform:uppercase; font-size:11px; margin-top:10px; opacity:.6; }
 </style>
 </head>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#2B2823"/><text x="50" y="55" font-size="28" fill="#D8C8B0" text-anchor="middle" font-family="serif" font-style="italic">D&amp;N</text></svg></template>
 <body class="locked">
 
 <div class="lightbox" id="lightbox"><span class="lb-close" id="lbClose">&times;</span><img id="lbImg" src="" alt="" /></div>
@@ -223,110 +223,42 @@ img{ max-width:100%; display:block; }
     <a href="#" data-full="./assets/gal-31.jpg"><img src="./assets/gal-31.jpg" alt="" loading="lazy" /></a>
     <a href="#" data-full="./assets/gal-32.jpg"><img src="./assets/gal-32.jpg" alt="" loading="lazy" /></a>
   </div>
-  <div class="gal-grid gal-extra" id="galExtra" style="display:none;margin-top:12px">
-    <a href="#" data-full="./assets/gal-extra-001.jpg"><img src="./assets/gal-extra-001.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-002.jpg"><img src="./assets/gal-extra-002.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-003.jpg"><img src="./assets/gal-extra-003.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-004.jpg"><img src="./assets/gal-extra-004.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-005.jpg"><img src="./assets/gal-extra-005.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-006.jpg"><img src="./assets/gal-extra-006.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-007.jpg"><img src="./assets/gal-extra-007.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-008.jpg"><img src="./assets/gal-extra-008.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-009.jpg"><img src="./assets/gal-extra-009.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-010.jpg"><img src="./assets/gal-extra-010.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-011.jpg"><img src="./assets/gal-extra-011.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-012.jpg"><img src="./assets/gal-extra-012.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-013.jpg"><img src="./assets/gal-extra-013.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-014.jpg"><img src="./assets/gal-extra-014.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-015.jpg"><img src="./assets/gal-extra-015.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-016.jpg"><img src="./assets/gal-extra-016.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-017.jpg"><img src="./assets/gal-extra-017.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-018.jpg"><img src="./assets/gal-extra-018.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-019.jpg"><img src="./assets/gal-extra-019.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-020.jpg"><img src="./assets/gal-extra-020.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-021.jpg"><img src="./assets/gal-extra-021.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-022.jpg"><img src="./assets/gal-extra-022.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-023.jpg"><img src="./assets/gal-extra-023.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-024.jpg"><img src="./assets/gal-extra-024.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-025.jpg"><img src="./assets/gal-extra-025.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-026.jpg"><img src="./assets/gal-extra-026.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-027.jpg"><img src="./assets/gal-extra-027.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-028.jpg"><img src="./assets/gal-extra-028.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-029.jpg"><img src="./assets/gal-extra-029.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-030.jpg"><img src="./assets/gal-extra-030.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-031.jpg"><img src="./assets/gal-extra-031.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-032.jpg"><img src="./assets/gal-extra-032.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-033.jpg"><img src="./assets/gal-extra-033.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-034.jpg"><img src="./assets/gal-extra-034.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-035.jpg"><img src="./assets/gal-extra-035.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-036.jpg"><img src="./assets/gal-extra-036.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-037.jpg"><img src="./assets/gal-extra-037.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-038.jpg"><img src="./assets/gal-extra-038.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-039.jpg"><img src="./assets/gal-extra-039.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-040.jpg"><img src="./assets/gal-extra-040.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-041.jpg"><img src="./assets/gal-extra-041.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-042.jpg"><img src="./assets/gal-extra-042.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-043.jpg"><img src="./assets/gal-extra-043.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-044.jpg"><img src="./assets/gal-extra-044.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-045.jpg"><img src="./assets/gal-extra-045.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-046.jpg"><img src="./assets/gal-extra-046.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-047.jpg"><img src="./assets/gal-extra-047.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-048.jpg"><img src="./assets/gal-extra-048.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-049.jpg"><img src="./assets/gal-extra-049.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-050.jpg"><img src="./assets/gal-extra-050.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-051.jpg"><img src="./assets/gal-extra-051.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-052.jpg"><img src="./assets/gal-extra-052.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-053.jpg"><img src="./assets/gal-extra-053.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-054.jpg"><img src="./assets/gal-extra-054.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-055.jpg"><img src="./assets/gal-extra-055.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-056.jpg"><img src="./assets/gal-extra-056.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-057.jpg"><img src="./assets/gal-extra-057.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-058.jpg"><img src="./assets/gal-extra-058.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-059.jpg"><img src="./assets/gal-extra-059.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-060.jpg"><img src="./assets/gal-extra-060.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-061.jpg"><img src="./assets/gal-extra-061.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-062.jpg"><img src="./assets/gal-extra-062.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-063.jpg"><img src="./assets/gal-extra-063.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-064.jpg"><img src="./assets/gal-extra-064.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-065.jpg"><img src="./assets/gal-extra-065.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-066.jpg"><img src="./assets/gal-extra-066.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-067.jpg"><img src="./assets/gal-extra-067.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-068.jpg"><img src="./assets/gal-extra-068.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-069.jpg"><img src="./assets/gal-extra-069.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-070.jpg"><img src="./assets/gal-extra-070.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-071.jpg"><img src="./assets/gal-extra-071.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-072.jpg"><img src="./assets/gal-extra-072.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-073.jpg"><img src="./assets/gal-extra-073.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-074.jpg"><img src="./assets/gal-extra-074.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-075.jpg"><img src="./assets/gal-extra-075.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-076.jpg"><img src="./assets/gal-extra-076.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-077.jpg"><img src="./assets/gal-extra-077.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-078.jpg"><img src="./assets/gal-extra-078.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-079.jpg"><img src="./assets/gal-extra-079.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-080.jpg"><img src="./assets/gal-extra-080.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-081.jpg"><img src="./assets/gal-extra-081.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-082.jpg"><img src="./assets/gal-extra-082.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-083.jpg"><img src="./assets/gal-extra-083.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-084.jpg"><img src="./assets/gal-extra-084.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-085.jpg"><img src="./assets/gal-extra-085.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-086.jpg"><img src="./assets/gal-extra-086.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-087.jpg"><img src="./assets/gal-extra-087.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-088.jpg"><img src="./assets/gal-extra-088.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-089.jpg"><img src="./assets/gal-extra-089.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-090.jpg"><img src="./assets/gal-extra-090.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-091.jpg"><img src="./assets/gal-extra-091.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-092.jpg"><img src="./assets/gal-extra-092.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-093.jpg"><img src="./assets/gal-extra-093.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-094.jpg"><img src="./assets/gal-extra-094.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-095.jpg"><img src="./assets/gal-extra-095.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-096.jpg"><img src="./assets/gal-extra-096.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-097.jpg"><img src="./assets/gal-extra-097.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-098.jpg"><img src="./assets/gal-extra-098.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-099.jpg"><img src="./assets/gal-extra-099.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-100.jpg"><img src="./assets/gal-extra-100.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-101.jpg"><img src="./assets/gal-extra-101.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-102.jpg"><img src="./assets/gal-extra-102.jpg" alt="" loading="lazy" /></a>
-    <a href="#" data-full="./assets/gal-extra-103.jpg"><img src="./assets/gal-extra-103.jpg" alt="" loading="lazy" /></a>
+
+  <div class="gal-grid gal-extra" id="galExtra" style="display:none;max-width:1200px;margin:24px auto 0">
+    <a href="#" data-full="./assets/gal-more-01.jpg"><img src="./assets/gal-more-01.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-02.jpg"><img src="./assets/gal-more-02.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-03.jpg"><img src="./assets/gal-more-03.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-04.jpg"><img src="./assets/gal-more-04.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-05.jpg"><img src="./assets/gal-more-05.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-06.jpg"><img src="./assets/gal-more-06.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-07.jpg"><img src="./assets/gal-more-07.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-08.jpg"><img src="./assets/gal-more-08.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-09.jpg"><img src="./assets/gal-more-09.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-10.jpg"><img src="./assets/gal-more-10.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-11.jpg"><img src="./assets/gal-more-11.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-12.jpg"><img src="./assets/gal-more-12.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-13.jpg"><img src="./assets/gal-more-13.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-14.jpg"><img src="./assets/gal-more-14.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-15.jpg"><img src="./assets/gal-more-15.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-16.jpg"><img src="./assets/gal-more-16.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-17.jpg"><img src="./assets/gal-more-17.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-18.jpg"><img src="./assets/gal-more-18.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-19.jpg"><img src="./assets/gal-more-19.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-20.jpg"><img src="./assets/gal-more-20.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-21.jpg"><img src="./assets/gal-more-21.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-22.jpg"><img src="./assets/gal-more-22.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-23.jpg"><img src="./assets/gal-more-23.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-24.jpg"><img src="./assets/gal-more-24.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-25.jpg"><img src="./assets/gal-more-25.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-26.jpg"><img src="./assets/gal-more-26.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-27.jpg"><img src="./assets/gal-more-27.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-28.jpg"><img src="./assets/gal-more-28.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-29.jpg"><img src="./assets/gal-more-29.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-30.jpg"><img src="./assets/gal-more-30.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-31.jpg"><img src="./assets/gal-more-31.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-32.jpg"><img src="./assets/gal-more-32.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-33.jpg"><img src="./assets/gal-more-33.jpg" alt="" loading="lazy" /></a>
+    <a href="#" data-full="./assets/gal-more-34.jpg"><img src="./assets/gal-more-34.jpg" alt="" loading="lazy" /></a>
   </div>
   <div style="text-align:center;margin-top:38px">
     <button id="galMoreBtn" class="gal-more-btn" data-i18n="gal.more">Voir plus de photos</button>
@@ -429,7 +361,6 @@ galMoreBtn.addEventListener("click", function(){
   var lang = document.documentElement.lang || "fr";
   var dict = I18N[lang] || I18N.fr;
   galMoreBtn.textContent = galOpen ? dict["gal.less"] : dict["gal.more"];
-
 });
 var lightbox = document.getElementById("lightbox");
 var lbImg = document.getElementById("lbImg");
