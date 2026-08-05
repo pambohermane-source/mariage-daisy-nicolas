@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  ::selection { background: rgba(205,164,75,.3); }
+  @keyframes menuBlink { 0%, 100% { box-shadow: 0 0 0 0 rgba(205,164,75,.55); } 50% { box-shadow: 0 0 0 10px rgba(205,164,75,0); } }
+  @keyframes menuGlow { 0%, 100% { border-color: rgba(205,164,75,.4); } 50% { border-color: rgba(205,164,75,1); } }
+</style>
+</helmet>
+<div style="position:relative; min-height:100vh; width:100%; font-family:'Jost',sans-serif; padding:14px; background-image:url('./assets/pagne-tile.jpg'); background-size:70px 70px; background-repeat:repeat;">
+  <div style="position:relative; z-index:1; min-height:calc(100vh - 28px); width:100%; border-radius:2px; box-shadow:0 20px 60px rgba(0,0,0,.5); display:flex; flex-direction:column; align-items:center; padding:40px 16px 28px; background:radial-gradient(120% 100% at 50% 0%, #241a2b 0%, #150f1a 55%, #0a0710 100%);">
+  <div style="position:relative; z-index:1; width:100%; display:flex; flex-direction:column; align-items:center;">
+
+  <img src="./assets/logo-maries-gold.png" alt="Daisy-Helen & Nicolas" style="width:88px; height:auto; margin-bottom:10px; filter:drop-shadow(0 2px 10px rgba(0,0,0,.4));">
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+    <span style="width:26px; height:1px; background:#cda44b; opacity:.8;"></span>
+    <span style="font-size:11px; letter-spacing:.3em; color:#d8b25a; text-transform:uppercase;">Mariage Civil</span>
+    <span style="width:26px; height:1px; background:#cda44b; opacity:.8;"></span>
+  </div>
+  <h1 style="margin:12px 0 14px; font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:clamp(28px,7vw,44px); color:#fbfaf7; text-align:center; line-height:1.15;">Daisy-Helen &amp; Nicolas</h1>
+  <p style="margin:0 0 28px; font-size:14px; color:#a89a72; text-align:center;">Tapez votre nom pour trouver votre table</p>
+
+  <div style="width:100%; max-width:480px; background:rgba(255,255,255,.03); border:1px solid rgba(205,164,75,.3); border-radius:4px; padding:24px 20px;">
+
+    <label style="display:block; font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:#d8b25a; margin-bottom:10px;">Votre nom &amp; pr&eacute;nom</label>
+    <input type="text" value="{{ query }}" oninput="{{ onInput }}" onkeydown="{{ onKeyDown }}" placeholder="Ex. Nicole Muloko" style="width:100%; padding:16px 16px; font-size:16px; font-family:'Jost',sans-serif; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.18); border-radius:3px; color:#fbfaf7; outline:none;">
+
+    <sc-if value="{{ showSuggestions }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:10px; border:1px solid rgba(255,255,255,.12); border-radius:3px; overflow:hidden;">
+        <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="0">
+          <div onclick="{{ s.select }}" style="padding:13px 16px; font-size:15px; color:#e9e4d8; cursor:pointer; border-bottom:1px solid rgba(255,255,255,.06);" style-hover="background:rgba(205,164,75,.12);">{{ s.name }} <span style="color:#8a8378; font-size:13px;"> &middot; {{ s.table }}</span></div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <button onclick="{{ onSearch }}" style="margin-top:16px; width:100%; padding:16px; background:#cda44b; color:#1a1408; border:none; border-radius:3px; font-size:15px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; cursor:pointer; -webkit-tap-highlight-color:transparent;" style-hover="background:#dbb45c;">Rechercher</button>
+
+    <sc-if value="{{ hasResult }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:28px; padding:26px; text-align:center; border:1px solid rgba(205,164,75,.5); background:rgba(205,164,75,.06); border-radius:3px;">
+        <div style="font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:#a89a72; margin-bottom:8px;">{{ resultName }}</div>
+        <div style="font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:#8a8378; margin-bottom:6px;">Votre table</div>
+        <div style="font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:38px; color:#f4e7c4;">{{ resultTable }}</div>
+        <sc-if value="{{ hasCat }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:8px; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#a89a72;">{{ resultCat }}</div>
+        </sc-if>
+        <sc-if value="{{ hasAccomp }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:14px; padding-top:14px; border-top:1px solid rgba(205,164,75,.25); font-size:14px; color:#c9c2b3;">{{ resultAccomp }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:28px; padding:20px; text-align:center; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.03); border-radius:3px; color:#c9c2b3; font-size:15px; line-height:1.5;">
+        Nom introuvable. V&eacute;rifiez l'orthographe ou pr&eacute;sentez-vous &agrave; l'accueil.
+      </div>
+    </sc-if>
+
+  </div>
+
+  <div style="width:100%; max-width:480px; margin-top:20px;">
+    <button onclick="{{ toggleMenu }}" style="width:100%; padding:17px; background:rgba(205,164,75,.1); border:1px solid rgba(205,164,75,.6); border-radius:4px; color:#f4e7c4; font-size:14px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; cursor:pointer; -webkit-tap-highlight-color:transparent; animation:menuBlink 2s ease-in-out infinite;" style-hover="background:rgba(205,164,75,.2);">{{ menuToggleLabel }}</button>
+
+    <sc-if value="{{ showMenu }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:14px; border:1px solid rgba(205,164,75,.3); background:rgba(255,255,255,.03); border-radius:4px; padding:20px;">
+
+        <div style="display:flex; gap:10px; margin-bottom:18px; padding:5px; background:rgba(0,0,0,.25); border-radius:30px;">
+          <sc-for list="{{ menuTabs }}" as="t" hint-placeholder-count="2">
+            <button onclick="{{ t.select }}" style="flex:1; padding:12px 10px; font-size:12px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; border-radius:24px; cursor:pointer; -webkit-tap-highlight-color:transparent; background:{{ t.bg }}; color:{{ t.color }}; border:none; box-shadow:{{ t.shadow }}; transform:{{ t.scale }}; transition:all .2s ease;" style-hover="opacity:.85;">{{ t.label }}</button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ activeMenuSubtitle }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11px; color:#c9c2b3; text-align:center; margin-bottom:16px; line-height:1.6;">{{ activeMenuSubtitle }}</div>
+        </sc-if>
+        <sc-for list="{{ activeMenuSections }}" as="sec" hint-placeholder-count="4">
+          <div style="margin-bottom:16px;">
+            <div style="font-family:'Playfair Display',serif; font-style:italic; font-weight:700; font-size:17px; color:#f4e7c4; margin-bottom:6px; border-bottom:1px solid rgba(205,164,75,.25); padding-bottom:4px;">{{ sec.title }}</div>
+            <sc-for list="{{ sec.items }}" as="it" hint-placeholder-count="3">
+              <div style="font-size:14px; color:#c9c2b3; padding:3px 0; line-height:1.4;">{{ it }}</div>
+            </sc-for>
+          </div>
+        </sc-for>
+
+      </div>
+    </sc-if>
+  </div>
+
+  <p style="margin-top:24px; font-size:13px; color:#6c665c; text-align:center; max-width:340px;">Besoin d'aide&nbsp;? Rendez-vous au stand d'accueil.</p>
+
+  <p style="margin-top:40px; font-size:11px; letter-spacing:.14em; color:#4a453d; text-align:center;">&Omacr;R&Iuml;A &middot; Digital Wedding</p>
+  </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const GUESTS = [{"name":"Aurélien Ntoutoume","table":"Table 1 — Saint-Tropez","accomp":0,"cat":"Saint-Tropez"},{"name":"Nicole Muloko","table":"Table 1 — Saint-Tropez","accomp":0,"cat":"Saint-Tropez"},{"name":"Henri Paul ELANG & Épouse","table":"Table 1 — Saint-Tropez","accomp":0,"cat":"Saint-Tropez"},{"name":"Maguy Rwakabuba","table":"Table 1 — Saint-Tropez","accomp":0,"cat":"Saint-Tropez"},{"name":"Clotilde Mutund","table":"Table 1 — Saint-Tropez","accomp":0,"cat":"Saint-Tropez"},{"name":"Nadia Ndouna","table":"Table 1 — Saint-Tropez","accomp":0,"cat":"Saint-Tropez"},{"name":"Marie Nguema","table":"Table 1 — Saint-Tropez","accomp":0,"cat":"Saint-Tropez"},{"name":"Erika Cornelie","table":"Table 1 — Saint-Tropez","accomp":0,"cat":"Saint-Tropez"},{"name":"Marceline Kaozi","table":"Table 1 — Saint-Tropez","accomp":0,"cat":"Saint-Tropez"},{"name":"Francis ABIAGHE & Épouse","table":"Table 1 Bis — Cannes","accomp":0,"cat":"Cannes"},{"name":"Jocelyn NKOGHE & Épouse","table":"Table 1 Bis — Cannes","accomp":0,"cat":"Cannes"},{"name":"Léopold AVA & Épouse","table":"Table 1 Bis — Cannes","accomp":0,"cat":"Cannes"},{"name":"Yvon OKOUAGHE & Épouse","table":"Table 1 Bis — Cannes","accomp":0,"cat":"Cannes"},{"name":"Effale Nze & épouse","table":"Table 1 Bis — Cannes","accomp":0,"cat":"Cannes"},{"name":"Madame et Monsieur Tabele","table":"Table 2 — Nice","accomp":0,"cat":"Nice"},{"name":"Roger Muloko","table":"Table 2 — Nice","accomp":0,"cat":"Nice"},{"name":"Anne Marie Makombo","table":"Table 2 — Nice","accomp":0,"cat":"Nice"},{"name":"Philippe Muloko","table":"Table 2 — Nice","accomp":0,"cat":"Nice"},{"name":"Maguy et Claude Muloko","table":"Table 2 — Nice","accomp":0,"cat":"Nice"},{"name":"Christiane Muloko","table":"Table 2 — Nice","accomp":0,"cat":"Nice"},{"name":"Virginie Bomboko","table":"Table 2 — Nice","accomp":0,"cat":"Nice"},{"name":"Janine Nkumu","table":"Table 2 — Nice","accomp":0,"cat":"Nice"},{"name":"France Lurhuma","table":"Table 2 — Nice","accomp":0,"cat":"Nice"},{"name":"Aude AKOURE","table":"Table 2 Bis — Antibes","accomp":0,"cat":"Antibes"},{"name":"Eugenie NGUEMA","table":"Table 2 Bis — Antibes","accomp":0,"cat":"Antibes"},{"name":"Eric MOUSSAVOU","table":"Table 2 Bis — Antibes","accomp":0,"cat":"Antibes"},{"name":"Gladys MEROT","table":"Table 2 Bis — Antibes","accomp":0,"cat":"Antibes"},{"name":"Natacha ORSET","table":"Table 2 Bis — Antibes","accomp":0,"cat":"Antibes"},{"name":"Rolande AZAM","table":"Table 2 Bis — Antibes","accomp":0,"cat":"Antibes"},{"name":"Thomas IBINGA & Épouse","table":"Table 2 Bis — Antibes","accomp":0,"cat":"Antibes"},{"name":"Yelena NZUE","table":"Table 2 Bis — Antibes","accomp":0,"cat":"Antibes"},{"name":"Caron AKOURE","table":"Table 2 Bis — Antibes","accomp":0,"cat":"Antibes"},{"name":"Steeve Ondzounga & épouse","table":"Table 3 — Cassis","accomp":0,"cat":"Cassis"},{"name":"Thomo Assoumou & épouse","table":"Table 3 — Cassis","accomp":0,"cat":"Cassis"},{"name":"Aboghe Ntoutoume & épouse","table":"Table 3 — Cassis","accomp":0,"cat":"Cassis"},{"name":"Mba Ezome & épouse","table":"Table 3 — Cassis","accomp":0,"cat":"Cassis"},{"name":"Fabrice NTCHANGO & épouse","table":"Table 3 — Cassis","accomp":0,"cat":"Cassis"},{"name":"Arsène NKOGHE & Épouse","table":"Table 3 Bis — Menton","accomp":0,"cat":"Menton"},{"name":"Eric NZAMBA & épouse","table":"Table 3 Bis — Menton","accomp":0,"cat":"Menton"},{"name":"Charlan ANGO","table":"Table 3 Bis — Menton","accomp":0,"cat":"Menton"},{"name":"Eril NDINGA","table":"Table 3 Bis — Menton","accomp":0,"cat":"Menton"},{"name":"Ivan OBAME & Épouse","table":"Table 3 Bis — Menton","accomp":0,"cat":"Menton"},{"name":"Orphée BEKALE & Épouse","table":"Table 3 Bis — Menton","accomp":0,"cat":"Menton"},{"name":"Price Andjuma","table":"Table 4 — Èze (Cortège mariés)","accomp":0,"cat":"Èze (Cortège mariés)"},{"name":"Nell Eyha","table":"Table 4 — Èze (Cortège mariés)","accomp":0,"cat":"Èze (Cortège mariés)"},{"name":"Mauwa Muloko","table":"Table 4 — Èze (Cortège mariés)","accomp":0,"cat":"Èze (Cortège mariés)"},{"name":"Tamaris Mokoko","table":"Table 4 — Èze (Cortège mariés)","accomp":0,"cat":"Èze (Cortège mariés)"},{"name":"Jimmy Nkoghe","table":"Table 4 — Èze (Cortège mariés)","accomp":0,"cat":"Èze (Cortège mariés)"},{"name":"Bruno Mebiame","table":"Table 4 — Èze (Cortège mariés)","accomp":0,"cat":"Èze (Cortège mariés)"},{"name":"Armand Mengome","table":"Table 4 — Èze (Cortège mariés)","accomp":0,"cat":"Èze (Cortège mariés)"},{"name":"Danielle Louembe","table":"Table 4 — Èze (Cortège mariés)","accomp":0,"cat":"Èze (Cortège mariés)"},{"name":"Désiré FORGET","table":"Table 4 Bis — Villefranche-sur-Mer","accomp":0,"cat":"Villefranche-sur-Mer"},{"name":"Hugues MEFANE & Épouse","table":"Table 4 Bis — Villefranche-sur-Mer","accomp":0,"cat":"Villefranche-sur-Mer"},{"name":"Joel & Anouchka MISSANDA","table":"Table 4 Bis — Villefranche-sur-Mer","accomp":0,"cat":"Villefranche-sur-Mer"},{"name":"Michael NGUEMA","table":"Table 4 Bis — Villefranche-sur-Mer","accomp":0,"cat":"Villefranche-sur-Mer"},{"name":"Stéphane MENDENE","table":"Table 4 Bis — Villefranche-sur-Mer","accomp":0,"cat":"Villefranche-sur-Mer"},{"name":"Vidal ESSINGONE","table":"Table 4 Bis — Villefranche-sur-Mer","accomp":0,"cat":"Villefranche-sur-Mer"},{"name":"Yanci OGOWAN","table":"Table 4 Bis — Villefranche-sur-Mer","accomp":0,"cat":"Villefranche-sur-Mer"},{"name":"Vanessa Nlandu","table":"Table 4 Bis — Villefranche-sur-Mer","accomp":0,"cat":"Villefranche-sur-Mer"},{"name":"Djeda Kalassa Mobutu","table":"Table 5 — Saint-Jean-Cap-Ferrat","accomp":0,"cat":"Saint-Jean-Cap-Ferrat"},{"name":"Yasese et Ondias Souna","table":"Table 5 — Saint-Jean-Cap-Ferrat","accomp":0,"cat":"Saint-Jean-Cap-Ferrat"},{"name":"Laetitia Ndyiade","table":"Table 5 — Saint-Jean-Cap-Ferrat","accomp":0,"cat":"Saint-Jean-Cap-Ferrat"},{"name":"Olivia Oniangue","table":"Table 5 — Saint-Jean-Cap-Ferrat","accomp":0,"cat":"Saint-Jean-Cap-Ferrat"},{"name":"Mimo Khoury","table":"Table 5 — Saint-Jean-Cap-Ferrat","accomp":0,"cat":"Saint-Jean-Cap-Ferrat"},{"name":"Solange Kalonji","table":"Table 5 — Saint-Jean-Cap-Ferrat","accomp":0,"cat":"Saint-Jean-Cap-Ferrat"},{"name":"Paola Obounda","table":"Table 5 — Saint-Jean-Cap-Ferrat","accomp":0,"cat":"Saint-Jean-Cap-Ferrat"},{"name":"Eric Monga","table":"Table 5 — Saint-Jean-Cap-Ferrat","accomp":0,"cat":"Saint-Jean-Cap-Ferrat"},{"name":"Joseph OYONO EBOUKA","table":"Table 5 Bis — Beaulieu-sur-Mer","accomp":0,"cat":"Beaulieu-sur-Mer"},{"name":"Nadji GOSSADINA & Épouse","table":"Table 5 Bis — Beaulieu-sur-Mer","accomp":0,"cat":"Beaulieu-sur-Mer"},{"name":"Philippe Augé & Épouse","table":"Table 5 Bis — Beaulieu-sur-Mer","accomp":0,"cat":"Beaulieu-sur-Mer"},{"name":"Roger ETENO & Épouse","table":"Table 5 Bis — Beaulieu-sur-Mer","accomp":0,"cat":"Beaulieu-sur-Mer"},{"name":"Victor WORA & Épouse","table":"Table 5 Bis — Beaulieu-sur-Mer","accomp":0,"cat":"Beaulieu-sur-Mer"},{"name":"Parikh Rajesh","table":"Table 5 Bis — Beaulieu-sur-Mer","accomp":0,"cat":"Beaulieu-sur-Mer"},{"name":"Karla Ondzounga","table":"Table 6 — Ramatuelle","accomp":0,"cat":"Ramatuelle"},{"name":"Rita Boudianguela","table":"Table 6 — Ramatuelle","accomp":0,"cat":"Ramatuelle"},{"name":"Stephane Igamba","table":"Table 6 — Ramatuelle","accomp":0,"cat":"Ramatuelle"},{"name":"Annick et Enzo Kalassa","table":"Table 6 — Ramatuelle","accomp":0,"cat":"Ramatuelle"},{"name":"Christa et Johan Ivala","table":"Table 6 — Ramatuelle","accomp":0,"cat":"Ramatuelle"},{"name":"David Mbadinga","table":"Table 6 — Ramatuelle","accomp":0,"cat":"Ramatuelle"},{"name":"Marlyne Izouret","table":"Table 6 — Ramatuelle","accomp":0,"cat":"Ramatuelle"},{"name":"Patrick Kaffe","table":"Table 6 — Ramatuelle","accomp":0,"cat":"Ramatuelle"},{"name":"Léo ENGOUANG","table":"Table 6 Bis — Sainte-Maxime","accomp":0,"cat":"Sainte-Maxime"},{"name":"Jean-Marie MBA MEBIAME & Épouse","table":"Table 6 Bis — Sainte-Maxime","accomp":0,"cat":"Sainte-Maxime"},{"name":"Oswald MANFOUMBI & Épouse","table":"Table 6 Bis — Sainte-Maxime","accomp":0,"cat":"Sainte-Maxime"},{"name":"Serge ABESSOLO & Épouse","table":"Table 6 Bis — Sainte-Maxime","accomp":0,"cat":"Sainte-Maxime"},{"name":"Stéphane ELESSA & Épouse","table":"Table 6 Bis — Sainte-Maxime","accomp":0,"cat":"Sainte-Maxime"},{"name":"Yves Minani","table":"Table 6 Bis — Sainte-Maxime","accomp":0,"cat":"Sainte-Maxime"},{"name":"Ashley Akendengue & épouse","table":"Table 7 — Le Lavandou","accomp":0,"cat":"Le Lavandou"},{"name":"Ousmane Mabignath Sall & épouse","table":"Table 7 — Le Lavandou","accomp":0,"cat":"Le Lavandou"},{"name":"Hashir Mabignath Sall & épouse","table":"Table 7 — Le Lavandou","accomp":0,"cat":"Le Lavandou"},{"name":"Clyde Ongoundou","table":"Table 7 — Le Lavandou","accomp":0,"cat":"Le Lavandou"},{"name":"Laika et Macaire Nembe","table":"Table 7 — Le Lavandou","accomp":0,"cat":"Le Lavandou"},{"name":"Edmery Mpouoh","table":"Table 7 — Le Lavandou","accomp":0,"cat":"Le Lavandou"},{"name":"Edou ABESSOLO & Épouse","table":"Table 7 Bis — Hyères","accomp":0,"cat":"Hyères"},{"name":"Ivan MENGOME & Épouse","table":"Table 7 Bis — Hyères","accomp":0,"cat":"Hyères"},{"name":"Corine EKOUME","table":"Table 7 Bis — Hyères","accomp":0,"cat":"Hyères"},{"name":"Terence EBOUMI & Épouse","table":"Table 7 Bis — Hyères","accomp":0,"cat":"Hyères"},{"name":"Yannick NDONG MBA","table":"Table 7 Bis — Hyères","accomp":0,"cat":"Hyères"},{"name":"Migeola MEKINA","table":"Table 7 Bis — Hyères","accomp":0,"cat":"Hyères"},{"name":"Glwadys MAGANGA","table":"Table 7 Bis — Hyères","accomp":0,"cat":"Hyères"},{"name":"Johanne Do Marcolino et Julien Dugnol","table":"Table 8 — Porquerolles","accomp":0,"cat":"Porquerolles"},{"name":"Meggie Boguikouma","table":"Table 8 — Porquerolles","accomp":0,"cat":"Porquerolles"},{"name":"Vanessa Boguikouma","table":"Table 8 — Porquerolles","accomp":0,"cat":"Porquerolles"},{"name":"Rodney Boguikouma","table":"Table 8 — Porquerolles","accomp":0,"cat":"Porquerolles"},{"name":"Malika et Arnaud Lebomo","table":"Table 8 — Porquerolles","accomp":0,"cat":"Porquerolles"},{"name":"Larissa et Michael Alengui Koumba","table":"Table 8 — Porquerolles","accomp":0,"cat":"Porquerolles"},{"name":"Nicole BENHA","table":"Table 8 — Porquerolles","accomp":0,"cat":"Porquerolles"},{"name":"Ange NZIENGUI","table":"Table 8 Bis — Bandol","accomp":0,"cat":"Bandol"},{"name":"Gwenaël NZE DE SOUZA et Épouse","table":"Table 8 Bis — Bandol","accomp":0,"cat":"Bandol"},{"name":"Keitia KIAKALA-KANZI","table":"Table 8 Bis — Bandol","accomp":0,"cat":"Bandol"},{"name":"Lionel SULTAN","table":"Table 8 Bis — Bandol","accomp":0,"cat":"Bandol"},{"name":"Nahomie KIAKALA-ANGHUNDA","table":"Table 8 Bis — Bandol","accomp":0,"cat":"Bandol"},{"name":"Naomie NZIENGUI","table":"Table 8 Bis — Bandol","accomp":0,"cat":"Bandol"},{"name":"Nicolas NGUEMA","table":"Table 8 Bis — Bandol","accomp":0,"cat":"Bandol"},{"name":"Lily et Patricia Fayette","table":"Table 8 Bis — Bandol","accomp":0,"cat":"Bandol"},{"name":"Célia Aleka et Fleury Onanga","table":"Table 9 — Sanary-sur-Mer","accomp":0,"cat":"Sanary-sur-Mer"},{"name":"Michelle et Rudy Ongollo","table":"Table 9 — Sanary-sur-Mer","accomp":0,"cat":"Sanary-sur-Mer"},{"name":"Aziz Daouda","table":"Table 9 — Sanary-sur-Mer","accomp":0,"cat":"Sanary-sur-Mer"},{"name":"Janin Yogui Gakoula","table":"Table 9 — Sanary-sur-Mer","accomp":0,"cat":"Sanary-sur-Mer"},{"name":"Monsieur et Madame Andjembe","table":"Table 9 — Sanary-sur-Mer","accomp":0,"cat":"Sanary-sur-Mer"},{"name":"Felix BONGO & Épouse","table":"Table 9 Bis — Marseille","accomp":0,"cat":"Marseille"},{"name":"Maixant NGOUNGA & Épouse","table":"Table 9 Bis — Marseille","accomp":0,"cat":"Marseille"},{"name":"Patrick BARBERA & Épouse","table":"Table 9 Bis — Marseille","accomp":0,"cat":"Marseille"},{"name":"Prospère MEBOUNE","table":"Table 9 Bis — Marseille","accomp":0,"cat":"Marseille"},{"name":"Patricia Berre","table":"Table 9 Bis — Marseille","accomp":0,"cat":"Marseille"},{"name":"Madame et Monsieur Nzamba","table":"Table 9 Bis — Marseille","accomp":0,"cat":"Marseille"},{"name":"Charlene Biffot","table":"Table 10 — Aix-en-Provence","accomp":0,"cat":"Aix-en-Provence"},{"name":"Heric Ntoutoume","table":"Table 10 — Aix-en-Provence","accomp":0,"cat":"Aix-en-Provence"},{"name":"Tino Muloko","table":"Table 10 — Aix-en-Provence","accomp":0,"cat":"Aix-en-Provence"},{"name":"Guy Martial","table":"Table 10 — Aix-en-Provence","accomp":0,"cat":"Aix-en-Provence"},{"name":"Camille Moutsinga","table":"Table 10 — Aix-en-Provence","accomp":0,"cat":"Aix-en-Provence"},{"name":"Jonathan Inguila","table":"Table 10 — Aix-en-Provence","accomp":0,"cat":"Aix-en-Provence"},{"name":"Charline Ekomba","table":"Table 10 — Aix-en-Provence","accomp":0,"cat":"Aix-en-Provence"},{"name":"Hermélia Hayes","table":"Table 10 — Aix-en-Provence","accomp":0,"cat":"Aix-en-Provence"},{"name":"Iseult Mokoko","table":"Table 10 Bis — Cap d'Antibes","accomp":0,"cat":"Cap d'Antibes"},{"name":"Noor et Bruno Boguikouma","table":"Table 10 Bis — Cap d'Antibes","accomp":0,"cat":"Cap d'Antibes"},{"name":"Lenna Fatima","table":"Table 10 Bis — Cap d'Antibes","accomp":0,"cat":"Cap d'Antibes"},{"name":"Benda Ndaki","table":"Table 10 Bis — Cap d'Antibes","accomp":0,"cat":"Cap d'Antibes"},{"name":"Marie et Lucie Ondzounga","table":"Table 10 Bis — Cap d'Antibes","accomp":0,"cat":"Cap d'Antibes"},{"name":"Jean Michel Muloko","table":"Table 10 Bis — Cap d'Antibes","accomp":0,"cat":"Cap d'Antibes"},{"name":"Ly Lan Muloko","table":"Table 10 Bis — Cap d'Antibes","accomp":0,"cat":"Cap d'Antibes"},{"name":"Glory  Muloko","table":"Table 10 Bis — Cap d'Antibes","accomp":0,"cat":"Cap d'Antibes"},{"name":"Eugène Nguema","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"Talyan Nguema","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"Lyha Ntoutoume Dibasso","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"Ethan Boguikouma","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"Maelle Loundou","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"Claude Esther Loundou","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"Kalinka Maganga Moussavou","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"Kimiko Maganga Moussavou","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"Corail Maganga Moussavou","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"Jade Raivire","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"},{"name":"TOTAL","table":"Table 11 — Saint-Raphaël","accomp":0,"cat":"Saint-Raphaël"}];
+
+function norm(s) {
+  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+}
+
+const MENUS = [
+  { label: "Menu Mariage", subtitle: "Menu Mariage Daisy-Hélène & Paul Nicolas — Nombre de convives : 200pax — Date : 31/07/2026 — Heure de livraison : 17h", sections: [
+    { title: "Entrées", items: ["Crabes farcis", "Paquet de concombre", "Atanga farci", "Œufs mimosa", "Quiche : aux oignons, thon, légumes", "Plateau de crudités"] },
+    { title: "Plats chauds", items: ["Gambas poêlées", "Langoustes dans sa persillade", "Coquelet rôti", "Gigot d'agneau à la printanière", "Magret de canard"] },
+    { title: "Grill", items: ["Coupé coupé de bœuf", "Brochette de poisson", "Brochette de poulet", "Echine de porc", "Saucisses"] },
+    { title: "Accompagnements", items: ["Riz/alloco/pommes sautées/Purée de patates douces/légumes sautés"] },
+    { title: "Desserts", items: ["Wedding cake", "Verrine de salade de fruits", "Mini flan", "Gateau au chocolat", "Gateau marbré", "Renversé à l'ananas"] }
+  ]},
+];
+
+class Component extends DCLogic {
+  state = { query: "", result: null, searched: false, showMenu: false, menuTab: 0 };
+
+  toggleMenu = () => this.setState(s => ({ showMenu: !s.showMenu }));
+
+  selectMenuTab = (i) => this.setState({ menuTab: i });
+
+  onInput = (e) => this.setState({ query: e.target.value, searched: false, result: null });
+
+  onKeyDown = (e) => { if (e.key === "Enter") this.doSearch(); };
+
+  doSearch = () => {
+    const q = norm(this.state.query);
+    if (!q) { this.setState({ result: null, searched: true }); return; }
+    let found = GUESTS.find(g => norm(g.name) === q);
+    if (!found) found = GUESTS.find(g => norm(g.name).includes(q) && q.length >= 3);
+    this.setState({ result: found || null, searched: true });
+  };
+
+  onSearch = () => this.doSearch();
+
+  select = (g) => this.setState({ query: g.name, result: g, searched: true });
+
+  renderVals() {
+    const q = norm(this.state.query);
+    let suggestions = [];
+    if (q.length >= 2 && !this.state.searched) {
+      suggestions = GUESTS.filter(g => norm(g.name).includes(q)).slice(0, 6).map(g => ({
+        name: g.name, table: g.table, select: () => this.select(g)
+      }));
+    }
+    const menuTabs = MENUS.map((m, i) => ({
+      label: m.label,
+      select: () => this.selectMenuTab(i),
+      bg: this.state.menuTab === i ? "#cda44b" : "transparent",
+      color: this.state.menuTab === i ? "#1a1408" : "#c9c2b3",
+      shadow: this.state.menuTab === i ? "0 3px 10px rgba(205,164,75,.4)" : "none",
+      scale: this.state.menuTab === i ? "scale(1.02)" : "scale(1)"
+    }));
+
+    return {
+      query: this.state.query,
+      onInput: this.onInput,
+      onKeyDown: this.onKeyDown,
+      onSearch: this.onSearch,
+      showSuggestions: suggestions.length > 0,
+      suggestions,
+      showMenu: this.state.showMenu,
+      toggleMenu: this.toggleMenu,
+      menuToggleLabel: this.state.showMenu ? "Masquer le menu ▲" : "Voir le menu du mariage ▼",
+      menuTabs,
+      activeMenuSections: MENUS[this.state.menuTab].sections,
+      activeMenuSubtitle: MENUS[this.state.menuTab].subtitle || "",
+      hasResult: !!this.state.result,
+      resultName: this.state.result ? this.state.result.name : "",
+      resultTable: this.state.result ? this.state.result.table : "",
+      hasCat: !!(this.state.result && this.state.result.cat),
+      resultCat: this.state.result && this.state.result.cat ? this.state.result.cat : "",
+      hasAccomp: !!(this.state.result && this.state.result.accomp > 0),
+      resultAccomp: this.state.result && this.state.result.accomp === 1 ? "+ 1 accompagnant prévu" : "+ " + (this.state.result ? this.state.result.accomp : 0) + " accompagnants prévus",
+      hasError: this.state.searched && !this.state.result,
+    };
+  }
+}
+</script>
+</body>
+</html>
